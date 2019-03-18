@@ -70,7 +70,7 @@ static const char * make_outpath(const char * inpath)
     return outpath;
 }
 
-int main_utf8(int argc, char ** argv)
+static int my_utf8_main(int argc, char ** argv)
 {
     int retcode = 0;
     const char * outpath;
@@ -103,7 +103,7 @@ int main_utf8(int argc, char ** argv)
 
 int main(int argc, char ** argv)
 {
-    return main_utf8(argc, argv);
+    return my_utf8_main(argc, argv);
 }
 
 #else
@@ -153,7 +153,7 @@ int wmain(int argc, wchar_t ** argv)
         return 1;
     }
 
-    retcode = main_utf8(argc, utf8argv);
+    retcode = my_utf8_main(argc, utf8argv);
     for(i = 0; i < argc; ++i)
         free(utf8argv[i]);
 
