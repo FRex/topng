@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_SIMD
 #define STBI_WINDOWS_UTF8
