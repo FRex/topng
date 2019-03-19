@@ -117,49 +117,33 @@ int main(int argc, char ** argv)
 /* for wcslen */
 #include <wchar.h>
 
-static char ** argv_to_utf8(int argc, wchar_t ** argv)
-{
-    int i, failure;
-    char ** ret = (char **)calloc(argc + 1, sizeof(char*));
-    if(!ret)
-        return NULL;
-
-    failure = 0;
-    for(i = 0; i < argc; ++i)
-    {
-        const size_t utf8len = wcslen(argv[i]) * 3 + 10;
-        ret[i] = (char*)malloc(utf8len);
-        if(!ret[i])
-        {
-            failure = 1;
-            break;
-        }
-        stbi_convert_wchar_to_utf8(ret[i], utf8len, argv[i]);
-    }
-
-    if(failure)
-    {
-        for(i = 0; i < argc; ++i)
-            free(ret[i]);
-
-        free(ret);
-        return NULL;
-    }
-
-    return ret;
-}
-
 int wmain(int argc, wchar_t ** argv)
 {
     int i, retcode;
-    char ** utf8argv = argv_to_utf8(argc, argv);
+    char ** utf8argv = (char **)calloc(argc + 1, sizeof(char*));
     if(!utf8argv)
     {
-        fputs("malloc error with wchar_t -> utf8\n", stderr);
+        fputs("calloc error in wmain\n", stderr);
         return 1;
     }
 
-    retcode = my_utf8_main(argc, utf8argv);
+    retcode = 0;
+    for(i = 0; i < argc; ++i)
+    {
+        const size_t utf8len = wcslen(argv[i]) * 3 + 10;
+        utf8argv[i] = (char*)malloc(utf8len);
+        if(!utf8argv[i])
+        {
+            retcode = 1;
+            fputs("malloc error in wmain\n", stderr);
+            break;
+        }
+        stbi_convert_wchar_to_utf8(utf8argv[i], utf8len, argv[i]);
+    }
+
+    if(retcode == 0)
+        retcode = my_utf8_main(argc, utf8argv);
+
     for(i = 0; i < argc; ++i)
         free(utf8argv[i]);
 
