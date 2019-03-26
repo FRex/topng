@@ -11,4 +11,9 @@ other amount of arguments it will print usage info to stderr and do nothing else
 * Tested on Windows 10 with Visual Studio 2017 and Pelles C
 * Tested on Fedora 29 with GCC
 
-Go to releases to download a Windows exe.
+Go to releases to download a Windows exe compiled with Pelles C with no `-O2`.
+
+**Warning**: when using Pelles C with `-O2` a certain operation in `stb_image`
+(average of two bytes in code handling average filter in png decoding) will
+produce incorrect result which will cause some png images to be badly corrupted:
+[Pelles C forum bug report](https://forum.pellesc.de/index.php?topic=7837.0).
