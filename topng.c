@@ -69,8 +69,8 @@ static const char * make_outpath(const char * inpath)
         return NULL;
 
     strcpy(outpath, inpath);
-    if(strchr(outpath, '.'))
-        (*strchr(outpath, '.')) = '\0';
+    if(strrchr(outpath, '.'))
+        (*strrchr(outpath, '.')) = '\0';
 
     strcat(outpath, ".png");
     return outpath;
