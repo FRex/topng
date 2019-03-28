@@ -64,13 +64,20 @@ static int resave_image(const char * input, const char * output)
 
 static const char * make_outpath(const char * inpath)
 {
+    size_t i, len, lastslash;
     char * outpath = (char *)malloc(strlen(inpath) + 10);
     if(!outpath)
         return NULL;
 
     strcpy(outpath, inpath);
-    if(strrchr(outpath, '.'))
-        (*strrchr(outpath, '.')) = '\0';
+    len = strlen(outpath);
+    lastslash = 0;
+    for(i = 0; i < len; ++i)
+        if(outpath[i] == '/' || outpath[i] == '\\')
+            lastslash = i + 1;
+
+    if(strrchr(outpath + lastslash, '.'))
+        (*strrchr(outpath + lastslash, '.')) = '\0';
 
     strcat(outpath, ".png");
     return outpath;
